@@ -1,5 +1,3 @@
-[application_helper_test.rb]
-
 require 'test_helper'
 
 class ApplicationHelperTest < ActionView::TestCase
