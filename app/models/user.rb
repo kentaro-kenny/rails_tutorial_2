@@ -73,15 +73,17 @@ class User < ApplicationRecord
     reset_sent_at < 2.hours.ago
   end
   
-  #試作feedの定義
-  #完全な実装は次章
+  #ユーザーのフィードを返す
   def feed
-    Micropost.where("user_id = ?", id)
+    following_ids = "SELECT followed_id FROM relationships
+                     WHERE follower_id = :user_id"
+    Micropost.where("user_id IN (#{following_ids})
+                     OR user_id = :user_id", user_id: id)
   end
   
   #ユーザーをフォローする
   def follow(other_user)
-    following << other_user
+    active_relationships.create(followed_id: other_user.id)
   end
   
   #ユーザーをフォロー解除する
